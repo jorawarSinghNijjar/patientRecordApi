@@ -87,6 +87,11 @@ dbConnection.connect((err) => {
     }
 
     console.log('connected as id: ' + dbConnection.threadId);
+    // dbConnection.query('SET GLOBAL sql_mode = "ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION"', (err,result,fields) => {
+    //     if(err) throw err;
+    //     console.log("sql_mode updated successfully!");
+    // });
+
     // dbConnection.query('CREATE DATABASE IF NOT EXISTS api_db', (err,result,fields) => {
     //     if(err) throw err;
     // });
@@ -95,7 +100,7 @@ dbConnection.connect((err) => {
     //     if(err) throw err;
     // })
 
-    let createTable = "CREATE TABLE IF NOT EXISTS patients(id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,name VARCHAR(255) NOT NULL, phone_number VARCHAR(20) NOT NULL, disease_type VARCHAR(255),created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP) ENGINE = InnoDB DEFAULT CHARSET = latin1;";
+    let createTable = "CREATE TABLE IF NOT EXISTS patients(id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,name VARCHAR(255) NOT NULL, phone_number VARCHAR(20) NOT NULL, disease_type VARCHAR(255),created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP) ENGINE = InnoDB DEFAULT CHARSET = latin1;";
 
     dbConnection.query(createTable, (err,result,fields) => {
         if(err) throw err;
