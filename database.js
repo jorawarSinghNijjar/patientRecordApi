@@ -1,6 +1,7 @@
 const mysql = require('mysql');
 
-const dbConnection = mysql.createConnection({
+const dbPool = mysql.createPool({
+    connectionLimit: 100,
     host: 'us-cdbr-iron-east-01.cleardb.net',
     user: 'bde2175ab374cb',
     password: 'cabc2fd4',
@@ -8,4 +9,4 @@ const dbConnection = mysql.createConnection({
 });
 
 
-module.exports = dbConnection;
+module.exports = dbPool;
