@@ -5,6 +5,7 @@ const cors = require('cors');
 
 const dbConnection = require('./database');
 
+var port = process.env.PORT || 3001;
 
 app.use(bodyParser.json());
 app.use(cors());
@@ -100,8 +101,8 @@ dbConnection.connect((err) => {
         if(err) throw err;
         console.log(result)
     })
-    app.listen(3001,() => {
-        console.log("Server is running at localhost:3001");
+    app.listen(port,() => {
+        console.log("Server is running at localhost: " + port);
     });
 });
 
