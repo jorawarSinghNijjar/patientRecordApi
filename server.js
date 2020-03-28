@@ -5,7 +5,7 @@ const cors = require('cors');
 
 const dbConnection = require('./database');
 
-var port = process.env.PORT || 3001;
+const PORT = process.env.PORT || 3001;
 
 app.use(bodyParser.json());
 app.use(cors());
@@ -87,13 +87,13 @@ dbConnection.connect((err) => {
     }
 
     console.log('connected as id: ' + dbConnection.threadId);
-    dbConnection.query('CREATE DATABASE IF NOT EXISTS api_db', (err,result,fields) => {
-        if(err) throw err;
-    });
+    // dbConnection.query('CREATE DATABASE IF NOT EXISTS api_db', (err,result,fields) => {
+    //     if(err) throw err;
+    // });
 
-    dbConnection.query('USE api_db', (err,result,fields) => {
-        if(err) throw err;
-    })
+    // dbConnection.query('USE api_db', (err,result,fields) => {
+    //     if(err) throw err;
+    // })
 
     let createTable = "CREATE TABLE IF NOT EXISTS patients(id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,name VARCHAR(255) NOT NULL, phone_number VARCHAR(20) NOT NULL, disease_type VARCHAR(255),created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP) ENGINE = InnoDB DEFAULT CHARSET = latin1;";
 
@@ -101,8 +101,8 @@ dbConnection.connect((err) => {
         if(err) throw err;
         console.log(result)
     })
-    app.listen(port,() => {
-        console.log("Server is running at localhost: " + port);
+    app.listen(PORT,() => {
+        console.log("Server is running at localhost: " + PORT);
     });
 });
 
