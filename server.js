@@ -27,6 +27,7 @@ app.post('/patient', (req, res, next) => {
 //DELETE SINGLE patient
 app.delete('/patient', (req, res, next) => {
     let patientId = req.params.id;
+    console.log(req);
     if(!patientId){
         return res.status(400).send({error: true, message: 'Please provide a patient id'});
     }
