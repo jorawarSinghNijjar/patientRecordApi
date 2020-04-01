@@ -78,7 +78,7 @@ app.get('/patients', (req, res, next) => {
 
 //Send mail
 
-app.use('/send',(req,res,next) => {
+app.post('/send',(req,res,next) => {
     if(!req.body.userEmail){
         return res.status(400).send({error: true, message: 'Please provide email address'});
     }
