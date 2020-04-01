@@ -89,9 +89,10 @@ app.use('/send',(req,res,next) => {
     sgMail.send(msg)
     .then(result => {
         console.log(result);
+        res.send({message: "Mail sent", result});
     })
     .catch(err => console.log(err));
-    res.send({message: "Mail sent"});
+    
 })
 
 
