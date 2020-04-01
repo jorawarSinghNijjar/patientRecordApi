@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const sgMail = require('./email');
 
 const dbPool = require('./database');
 
@@ -75,6 +76,23 @@ app.get('/patients', (req, res, next) => {
     });
 });
 
+//Send mail
+const msg = {
+    to: "kawal5_nijjar@yahoo.co.in",
+    from: "jorawarsinghnijjar@gmail.com",
+    subject: "Test email from Node sendgrid",
+    text: "It should work!",
+    html: "<h1>this is html</h1>"
+};
+
+app.use('/send',(req,res,next) => {
+    sgMail.send(msg)
+    .then(result => {
+        console.log(result);
+    })
+    .catch(err => console.log(err));
+    res.send({message: "Mail sent"});
+})
 
 
 //DEFAULT route
