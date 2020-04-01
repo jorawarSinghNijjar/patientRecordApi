@@ -78,7 +78,7 @@ app.get('/patients', (req, res, next) => {
 
 //Send mail
 const msg = {
-    to: "kawal5_nijjar@yahoo.co.in",
+    to: "jorawarsinghnijjar@gmail.com",
     from: "jorawarsinghnijjar@gmail.com",
     subject: "Test email from Node sendgrid",
     text: "It should work!",
