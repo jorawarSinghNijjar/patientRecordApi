@@ -77,19 +77,22 @@ app.get('/patients', (req, res, next) => {
 });
 
 //Send mail
-const msg = {
-    to: "jorawarsinghnijjar@gmail.com",
-    from: "jorawarsinghnijjar@gmail.com",
-    subject: "Test email from Node sendgrid",
-    text: "It should work!",
-    html: "<h1>this is html</h1>"
-};
 
 app.use('/send',(req,res,next) => {
+    if(!req.body.userEmail){
+        return res.status(400).send({error: true, message: 'Please provide email address'});
+    }
+    const msg = {
+        to: req.body.userEmail,
+        from: "jorawarsinghnijjar@gmail.com",
+        subject: req.body.subject,
+        text: req.body.text,
+        html: req.body.html
+    };
     sgMail.send(msg)
     .then(result => {
         console.log(result);
-        res.send({message: "Mail sent", result});
+        return res.send({message: "Mail sent successfully",error:false, result});
     })
     .catch(err => console.log(err));
     
