@@ -124,11 +124,25 @@ dbPool.on('acquire',(connection) => {
     
 });
 
-let createTable = "CREATE TABLE IF NOT EXISTS patients(id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,name VARCHAR(255) NOT NULL, phone_number VARCHAR(20) NOT NULL, disease_type VARCHAR(255),created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP) ENGINE = InnoDB DEFAULT CHARSET = latin1;";
+let createTablePatients = "CREATE TABLE IF NOT EXISTS patients(id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,name VARCHAR(255) NOT NULL, phone_number VARCHAR(20) NOT NULL, disease_type VARCHAR(255),created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP) ENGINE = InnoDB DEFAULT CHARSET = latin1;";
 
-dbPool.query(createTable, (err,result,fields) => {
+let createTableHospitals = "CREATE TABLE IF NOT EXISTS hospitals(id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,name VARCHAR(255) NOT NULL, phone_number VARCHAR(20) NOT NULL, email VARCHAR(255) NOT NULL, subsrciption_type VARCHAR(50) NOT NULL,created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP) ENGINE = InnoDB DEFAULT CHARSET = latin1;";
+
+let createTableEmployees = "CREATE TABLE IF NOT EXISTS employees(id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,name VARCHAR(255) NOT NULL, phone_number VARCHAR(20) NOT NULL, job_role VARCHAR(50) NOT NULL, hospital_id INT NOT NULL, login_id VARCHAR(255), password VARCHAR(255), created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY(hospital_id) REFERENCES PRIMARY KEY hospitals(id)) ENGINE = InnoDB DEFAULT CHARSET = latin1;";
+
+dbPool.query(createTableHospitals, (err,result,fields) => {
+    if(err) throw err;
+    console.log("Hospitals Table created successfully!");
+});
+
+dbPool.query(createTablePatients, (err,result,fields) => {
     if(err) throw err;
     console.log("Patients Table created successfully!");
+});
+
+dbPool.query(createTableEmployees, (err,result,fields) => {
+    if(err) throw err;
+    console.log("Employees Table created successfully!");
 });
 
 app.listen(PORT,() => {
