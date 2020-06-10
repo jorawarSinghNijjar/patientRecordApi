@@ -50,7 +50,7 @@ app.put('/patient', (req, res, next) => {
         return res.status(400).send({error: true, message: 'Please provide a patient id'});
     }
 
-    dbPool.query('UPDATE patients SET patient = ? WHERE id = ?', [patient, patientId], (err, result, fields) => {
+    dbPool.query('UPDATE patients SET name = ?, phone_number = ?, disease_type = ? WHERE id = ?', [patient.name, patient.phone_number, patient.disease_type, patientId], (err, result, fields) => {
         if(err) throw err;
         return res.send({error: false, data: result, message:'patient has been updated successfully'});
     });
@@ -124,25 +124,34 @@ dbPool.on('acquire',(connection) => {
     
 });
 
-let createTablePatients = "CREATE TABLE IF NOT EXISTS patients(id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,name VARCHAR(255) NOT NULL, phone_number VARCHAR(20) NOT NULL, disease_type VARCHAR(255),created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP) ENGINE = InnoDB DEFAULT CHARSET = latin1;";
+let createTablePatientsQuery = "CREATE TABLE IF NOT EXISTS patients(id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,name VARCHAR(255) NOT NULL, phone_number VARCHAR(20) NOT NULL, disease_type VARCHAR(255),created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP) ENGINE = InnoDB DEFAULT CHARSET = latin1;";
 
-let createTableHospitals = "CREATE TABLE IF NOT EXISTS hospitals(id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,name VARCHAR(255) NOT NULL, phone_number VARCHAR(20) NOT NULL, email VARCHAR(255) NOT NULL, subsrciption_type VARCHAR(50) NOT NULL,created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP) ENGINE = InnoDB DEFAULT CHARSET = latin1;";
+let createTableHospitalsQuery = "CREATE TABLE IF NOT EXISTS hospitals(id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,name VARCHAR(255) NOT NULL, phone_number VARCHAR(20) NOT NULL, email VARCHAR(255) NOT NULL, subsrciption_type VARCHAR(50) NOT NULL,created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP) ENGINE = InnoDB DEFAULT CHARSET = latin1;";
 
-let createTableEmployees = "CREATE TABLE IF NOT EXISTS employees(id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,name VARCHAR(255) NOT NULL, phone_number VARCHAR(20) NOT NULL, job_role VARCHAR(50) NOT NULL, hospital_id INT NOT NULL, login_id VARCHAR(255), password VARCHAR(255), created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY(hospital_id) REFERENCES hospitals(id)) ENGINE = InnoDB DEFAULT CHARSET = latin1;";
+let createTableEmployeesQuery = "CREATE TABLE IF NOT EXISTS employees(id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,name VARCHAR(255) NOT NULL, phone_number VARCHAR(20) NOT NULL, job_role VARCHAR(50) NOT NULL, hospital_id INT NOT NULL, login_id VARCHAR(255), password VARCHAR(255), created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY(hospital_id) REFERENCES hospitals(id)) ENGINE = InnoDB DEFAULT CHARSET = latin1;";
 
-dbPool.query(createTableHospitals, (err,result,fields) => {
-    if(err) throw err;
-    console.log("Hospitals Table created successfully!");
-});
 
-dbPool.query(createTablePatients, (err,result,fields) => {
+
+dbPool.query(createTablePatientsQuery, (err,result,fields) => {
     if(err) throw err;
     console.log("Patients Table created successfully!");
 });
 
-dbPool.query(createTableEmployees, (err,result,fields) => {
-    if(err) throw err;
-    console.log("Employees Table created successfully!");
+
+const createTableHospitals = (callback) => {
+    dbPool.query(createTableHospitalsQuery, (err,result,fields) => {
+        if(err) throw err;
+        console.log("Hospitals Table created successfully!");
+        // Employees table should be created only after creation of hospitals
+        callback();
+    });
+};
+
+createTableHospitals(() => {
+    dbPool.query(createTableEmployeesQuery, (err,result,fields) => {
+        if(err) throw err;
+        console.log("Employees Table created successfully!");
+    });
 });
 
 app.listen(PORT,() => {
