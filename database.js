@@ -17,11 +17,11 @@ const localConfig = {
 };
 
 const dbPool = mysql.createPool({
-    connectionLimit: localConfig.connectionLimit,
-    host: localConfig.host,
-    user: localConfig.user,
-    password: localConfig.password,
-    database: localConfig.database
+    connectionLimit: herokuConfig.connectionLimit,
+    host: herokuConfig.host,
+    user: herokuConfig.user,
+    password: herokuConfig.password,
+    database: herokuConfig.database
 });
 
 
